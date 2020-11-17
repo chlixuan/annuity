@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 
+</head>
+<body>
+
+<div id="app">
+	<h1>城镇职工养老金计算</h1>
+	基本养老金=基础养老金+个人账户养老金+过渡性养老金<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{基础养老金}}元+{{个人账户养老金}}元+{{过渡性养老金}}元<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{基本养老金}}元<br/>
+	<h2>基础养老金</h2>
+	<ul>
+	<li>
+	缴费年限=<input type="number" v-model.number="缴费年限">年<br/>
+	当年缴费工资=<input type="number" v-model.number="当年缴费工资">元<br/>
+	当年职工月平均工资=<input type="number" v-model.number="统筹地区上年度职工月平均工资">元<br/>
+	注：为了简化计算，假设没有通货膨胀，职工平均工资没有涨跌，“退休时统筹地区上年度职工月平均工资” 可以取 “当年职工月平均工资”<br/>
+	</li>
+	<li>
+	基础养老金=（退休时统筹地区上年度职工月平均工资＋本人指数化月平均缴费工资)／2×缴费年限×1％；<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	=（{{统筹地区上年度职工月平均工资}}＋{{指数化月平均工资}})／2×{{缴费年限}}×1％<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{基础养老金}}元<br/>
+	</li>
+	<li>
+	指数化月平均工资=平均缴费指数×退休时统筹地区上年度职工月平均工资；<br/>
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{缴费工资指数}}×{{统筹地区上年度职工月平均工资}}元<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{指数化月平均工资}}元<br/>
+	</li>
+	<li>平均缴费指数=各年度缴费指数/缴费年限；<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	约等于=缴费工资指数<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{缴费工资指数}}
+	</li>
+	<li>缴费工资指数=当年缴费工资/统筹地区上年度职工月平均工资;<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{当年缴费工资}}元/{{统筹地区上年度职工月平均工资}}元<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	={{缴费工资指数}}
+	</li>
+	</ul>
+	<h2>个人账户养老金</h2>
+	
+	<ul>
+	<li>
+	当前余额=<input type="number" v-model.number="当前余额">元<br/>
+	当前年龄=<input type="number" v-model.number="当前年龄">岁<br/>
+	停缴年龄=<input type="number" v-model.number="停缴年龄">岁<br/>
+	</li>
+	<li>
+	
+	个人账户养老金 = 个人账户储存余额／计发月数；<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+					={{个人账户储存余额}}元／{{计发月数}}<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+					={{个人账户养老金}}元
+	</li>
+	<li>
+	个人账户储存余额 = 当前余额+每月个人缴费金额*剩余缴费月数<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+					  = {{当前余额}}元+{{每月个人缴费金额}}*{{剩余缴费月数}}<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+					  = {{个人账户储存余额}}元
+	</li>
+	<li>
+	每月个人缴费金额 = 缴费工资 * 8%<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	 = {{每月个人缴费金额}}元
+	</li>
+	<li>
+	剩余缴费月数 = （停缴年龄 - 当前年龄）* 12<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	 =（{{停缴年龄}} - {{当前年龄}}）* 12<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	 = {{剩余缴费月数}}
+	</li>
+	<li>
+	计发月数因退休年龄而不同，60岁退休139个月，65岁退休101个月
+	</li>
+	</ul>
+	<h2>过渡性养老金</h2>
+	只有以下参保人员才有该项：国发［1997］26号文件实施前参加工作、国发［2005］38号文件实施后退休的参保人员属于“中人”。
+
+</div>
+
+<!--script src="vue.2.6.12.js"-->
+<script src="https://unpkg.com/vue">
+</script>
+
+<script>
+	const app=new Vue({
+		el:'#app',
+		data:{
+			缴费年限:15,
+			当前年龄:37,
+			停缴年龄:42,
+			当前余额: 66666,
+			计发月数: 139,
+			过渡性养老金:0,
+			当年缴费工资:5000,
+			统筹地区上年度职工月平均工资:5650
+		},
+		created(){
+			//18年城镇职工年平均工资66789元
+			this.统筹地区上年度职工月平均工资 = (66789/12).toFixed(2);
+		},
+		computed:{
+			缴费工资指数(){
+				return (this.当年缴费工资/this.统筹地区上年度职工月平均工资).toFixed(2);
+			},
+			指数化月平均工资(){
+				return (this.缴费工资指数*this.统筹地区上年度职工月平均工资).toFixed(2);
+			},
+			基础养老金(){
+				return ((Number(this.统筹地区上年度职工月平均工资)+Number(this.指数化月平均工资))/2*this.缴费年限*0.01).toFixed(2);
+			},
+			剩余缴费月数(){
+				return (this.停缴年龄-this.当前年龄)*12;
+			},
+			每月个人缴费金额(){
+				return (this.当年缴费工资*0.08).toFixed(2);
+			},
+			个人账户储存余额(){
+				return this.当前余额+this.每月个人缴费金额*this.剩余缴费月数;
+			},
+			个人账户养老金(){
+				return (this.个人账户储存余额/this.计发月数).toFixed(2);
+			},
+			基本养老金(){
+				return (Number(this.基础养老金)+Number(this.个人账户养老金)+Number(this.过渡性养老金)).toFixed(2);
+			}
+		}
+	});
+</script>
+
+</body>
+</html>
