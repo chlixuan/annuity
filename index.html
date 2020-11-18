@@ -37,7 +37,7 @@
 	</li>
 	<li>平均缴费指数=各年度缴费指数/缴费年限；<br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	约等于=缴费工资指数<br/>
+	≈ 缴费工资指数<br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	={{缴费工资指数}}
 	</li>
@@ -67,18 +67,29 @@
 					={{个人账户养老金}}元
 	</li>
 	<li>
-	个人账户储存余额 = 当前余额+每月个人缴费金额*剩余缴费月数<br/>
+	
+	个人账户储存余额来源：<br/>
+	①工作人员本人缴纳的全部养老保险费；<br/>
+	②从用人单位缴纳的养老保险费中按规定划转记入的部分（本单位上年度月平均工资的11%减去个人缴纳部分）；<br/>
+	③利息（忽略）<br/>
+	
+	个人账户储存余额 = 当前余额+个人账户每月储存金额*剩余缴费月数<br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	
-					  = {{当前余额}}元+{{每月个人缴费金额}}*{{剩余缴费月数}}<br/>
+					  = {{当前余额}}元+{{个人账户每月储存金额}}*{{剩余缴费月数}}<br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	
 					  = {{个人账户储存余额}}元
 	</li>
 	<li>
-	每月个人缴费金额 = 缴费工资 * 8%<br/>
+	
+	个人账户每月储存金额  ≈ (11% 当年缴费工资 - 个人缴纳部分) + 个人缴纳部分<br/>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	 = {{每月个人缴费金额}}元
+				  ≈ 11% 当年缴费工资 <br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  ≈ 11% * {{当年缴费工资}}元 <br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				  ≈ {{个人账户每月储存金额}}元
 	</li>
 	<li>
 	剩余缴费月数 = （停缴年龄 - 当前年龄）* 12<br/>
@@ -133,8 +144,17 @@
 			每月个人缴费金额(){
 				return (this.当年缴费工资*0.08).toFixed(2);
 			},
+			个人账户每月储存金额(){
+				//单位缴费20%，有部分划转到个人账户。
+				//划转记入的部分 为 本单位上年度月平均工资的11%减去个人缴纳部分
+				//假设单位月工资一样， 都等于缴费工资，那么每月个人账户储存额为：
+				//   (11% 缴费工资 - 个人缴纳部分) + 个人缴纳部分
+				//  = 11% 缴费工资
+				return (this.当年缴费工资*0.11).toFixed(2);
+			},
 			个人账户储存余额(){
-				return this.当前余额+this.每月个人缴费金额*this.剩余缴费月数;
+			
+				return this.当前余额+this.个人账户每月储存金额*this.剩余缴费月数;
 			},
 			个人账户养老金(){
 				return (this.个人账户储存余额/this.计发月数).toFixed(2);
